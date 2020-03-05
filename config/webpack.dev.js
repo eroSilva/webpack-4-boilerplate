@@ -1,6 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
@@ -23,9 +25,10 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader" // transpiling our JavaScript files using Babel and webpack
-        }
+        use: [
+          "babel-loader", // transpiling our JavaScript files using Babel and webpack
+          "webpack-import-glob-loader"
+        ]
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -45,7 +48,7 @@ module.exports = {
               name: "[name].[ext]",
               outputPath: "assets/"
             }
-          },
+          }
         ]
       },
       {
@@ -65,9 +68,22 @@ module.exports = {
     // In this case, this plugin will remove 'dist' and 'build' folder before re-build again
     new CleanWebpackPlugin(),
     // The plugin will generate an HTML5 file for you that includes all your webpack bundles in the body using script tags
+
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       filename: "index.html"
     }),
+
+    new HtmlWebpackPlugin({
+      template: "./src/about.html",
+      filename: "about.html"
+    }),
+
+    new HtmlWebpackPlugin({
+      template: "./src/contact.html",
+      filename: "contact.html"
+    }),
+
+    new BundleAnalyzerPlugin()
   ]
 };

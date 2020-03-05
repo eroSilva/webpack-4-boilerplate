@@ -6,7 +6,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const TerserJSPlugin = require("terser-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const BrotliPlugin = require("brotli-webpack-plugin");
-const PurgecssPlugin = require('purgecss-webpack-plugin');
+const PurgecssPlugin = require("purgecss-webpack-plugin");
 const glob = require("glob");
 
 module.exports = {
@@ -24,9 +24,10 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader" // transpiling our JavaScript files using Babel and webpack
-        }
+        use: [
+          "babel-loader", // transpiling our JavaScript files using Babel and webpack
+          "webpack-import-glob-loader"
+        ]
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -46,7 +47,7 @@ module.exports = {
               name: "[name].[ext]",
               outputPath: "assets/"
             }
-          },
+          }
         ]
       },
       {
@@ -61,46 +62,58 @@ module.exports = {
       }
     ]
   },
-  optimization: {
-    minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()],
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all"
-        }
-      },
-      chunks: "all"
-    },
-    runtimeChunk: {
-      name: "runtime"
-    }
-  },
+  // optimization: {
+  //   minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()],
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       commons: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: "vendors",
+  //         chunks: "all"
+  //       }
+  //     },
+  //     chunks: "all"
+  //   },
+  //   runtimeChunk: {
+  //     name: "runtime"
+  //   }
+  // },
   plugins: [
     // CleanWebpackPlugin will do some clean up/remove folder before build
     // In this case, this plugin will remove 'dist' and 'build' folder before re-build again
     new CleanWebpackPlugin(),
     // PurgecssPlugin will remove unused CSS
     new PurgecssPlugin({
-      paths: glob.sync(path.resolve(__dirname, '../src/**/*'), { nodir: true })
+      paths: glob.sync(path.resolve(__dirname, "../src/**/*"), { nodir: true })
     }),
     // This plugin will extract all css to one file
     new MiniCssExtractPlugin({
       filename: "[name].[chunkhash:8].bundle.css",
-      chunkFilename: "[name].[chunkhash:8].chunk.css",
+      chunkFilename: "[name].[chunkhash:8].chunk.css"
     }),
     // The plugin will generate an HTML5 file for you that includes all your webpack bundles in the body using script tags
+
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       filename: "index.html"
     }),
+
+    new HtmlWebpackPlugin({
+      template: "./src/about.html",
+      filename: "about.html"
+    }),
+
+    new HtmlWebpackPlugin({
+      template: "./src/contact.html",
+      filename: "contact.html"
+    }),
+
     // ComppresionPlugin will Prepare compressed versions of assets to serve them with Content-Encoding.
     // In this case we use gzip
     // But, you can also use the newest algorithm like brotli, and it's supperior than gzip
     new CompressionPlugin({
       algorithm: "gzip"
-    }),
-    new BrotliPlugin(),
+    })
+    // new BrotliPlugin()
   ]
 };
