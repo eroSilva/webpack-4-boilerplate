@@ -7,6 +7,7 @@
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-react-jsx": "^7.8.3",
     "@babel/preset-env": "^7.7.7",
     "babel-loader": "^8.0.6",
     "brotli-webpack-plugin": "^1.1.0",
@@ -23,12 +24,16 @@
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "purgecss-webpack-plugin": "^1.6.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.1.2",
     "terser-webpack-plugin": "^2.3.1",
     "webpack": "^4.41.5",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-dev-server": "^3.10.1",
+    "webpack-import-glob-loader": "^1.6.3"
   },
   "scripts": {
     "start": "webpack-dev-server --open --config=config/webpack.dev.js",
